@@ -1,16 +1,20 @@
 {
   "dependencies": {
+    "date-and-time": "^2.1.2",
     "dateformat": "^5.0.3",
+    "express": "^4.17.3",
+    "express-mongo-db": "^1.0.0",
+    "mongo-express": "^1.0.0-alpha.4",
+    "mongodb": "^4.4.0",
     "mongoose": "^6.2.2"
   },
   "scripts": {
-    "start": "node server.js"
+    "start": "nodemon server.js"
   },
   "name": "the-social-platform",
   "description": "<p> npm i mongoose <p>",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Blackcat-Tinkerngineers/the-social-platform.git"

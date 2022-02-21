@@ -31,16 +31,15 @@ const usersSchema = new Schema(
                 },
             ],
         },
-            toJSON: {
-                virtuals: true,
-            },
-            id: false,
-        });
+        toJSON: {
+            virtuals: true,
+        },
+        id: false,
+    });
 
-usersSchema.virtual('friendCount').get(function () 
-{
+usersSchema.virtual('friendCount').get(function () {
     return this.friends.length;
-});        
+});
 
 const Users = model('Users', usersSchema);
 

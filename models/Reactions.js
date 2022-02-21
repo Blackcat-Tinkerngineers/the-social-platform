@@ -10,18 +10,18 @@ const reactionsSchema = new Schema(
     creactionBody: {
       type: String,
       required: true,
-        maxlength: 280
+      maxlength: 280
     },
-  username: {
-        type: String,
-        required: true
-      },
+    username: {
+      type: String,
+      required: true
+    },
     createdAt: {
       type: Date,
       default: Date.now,
       get: timestamp => dateFormat(timestamp)
     },
-},
+  },
   {
     toJSON: {
       virtuals: true,
@@ -31,7 +31,7 @@ const reactionsSchema = new Schema(
   }
 );
 
-reactionsSchema.virtual('thoughtCount').get(function() {
+reactionsSchema.virtual('thoughtCount').get(function () {
   return this.Thoughts.reduce(
     (total, thoughts) => total + thoughts.replies.length + 1,
     0
