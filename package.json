@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "dateformat": "^5.0.3",
+    "mongoose": "^6.2.2"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "the-social-platform",
+  "description": "<p> npm i mongoose <p>",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blackcat-Tinkerngineers/the-social-platform.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blackcat-Tinkerngineers/the-social-platform/issues"
+  },
+  "homepage": "https://github.com/Blackcat-Tinkerngineers/the-social-platform#readme"
+}
