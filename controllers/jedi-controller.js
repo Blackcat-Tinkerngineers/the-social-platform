@@ -4,134 +4,108 @@ var jediController = {
 
     getAllJedis(req, res) {
         Jedi.find({})
-        .select("-__v")
-        .then(dbJediData => res.json(dbJediData))
-        .catch(err => {
-            console.log(err);
-            res.status(500).json(err);
-        })
+            .populate({ path: "padawan", select: "-__v" })
+            .select("-__v")
+            .then(dbJediData => res.json(dbJediData))
+            .catch(err => {
+                console.log(err);
+                res.status(500).json(err);
+            })
     },
 
     getJediById({ params }, res) {
         Jedi.findOne({ _id: params.id })
-        .populate([
-            { path: "forces", select: "-__v" },
-            { path: "padawan", select: "-__v" }
-        ])
-        .select("-__v")
-        .then(dbJediData => {
-            if (!dbJediData) {
-                res.status(404).json({message: "No jedi found"});
-                return;
-            }
-            res.json(dbJediData);
-        })
-        .catch(err => {
-            console.log(err);
-            res.status(400).json(err);
-        });
+            .populate({ path: "padawan", select: "-__v" })
+            .select("-__v")
+            .then(dbJediData => {
+                if (!dbJediData) {
+                    res.status(404).json({ message: "No jedi found" });
+                    return;
+                }
+                res.json(dbJediData);
+            })
+            .catch(err => {
+                console.log(err);
+                res.status(400).json(err);
+            });
     },
 
     createJedi({ body }, res) {
         Jedi.create(body)
-        .then(dbJediData => res.json(dbJediData))
-        .catch(err => res.status(400).json(err));
+            .then(dbJediData => res.json(dbJediData))
+            .catch(err => res.status(400).json(err));
     },
 
     updateJedi({ params, body }, res) {
-        Jedi.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
-        .then(dbJediData => {
-            if (!dbJediData) {
-                res.status(404).json({ message: "No jedi found" });
-                return;
-            }
-            res.json(dbJediData);
-        })
-        .catch(err => res.status(400).json(err));
+        Jedi.findOneAndUpdate(
+            { _id: params.id },
+             body,
+            { new: true, runValidators: true }
+            )
+            .then(dbJediData => {
+                if (!dbJediData) {
+                    res.status(404).json({ message: "No jedi found" });
+                    return;
+                }
+                res.json(dbJediData);
+            })
+            .catch(err => res.status(400).json(err));
     },
 
 
     deleteJedi({ params }, res) {
         Jedi.findOneAndDelete({ _id: params.id })
-        .then(dbJediData => {
-            if (!dbJediData) {
-                res.status(404).json({ message: "No jedi found"});
-                return;
-            }
+            .then(dbJediData => {
+                if (!dbJediData) {
+                    res.status(404).json({ message: "No jedi found" });
+                    return;
+                }
 
-            Jedi.updateMany(
-                { _id : {$in: dbJediData.padawan } },
-                { $pull: { padawan: params.id } }
-            )
-            .then(() => {
+                Jedi.findOneAndUpdate(
+                    { _id: { $in: dbJediData.padawan } },
+                    { $pull: { padawans: params.id } }
+                )
+                    .then(() => {
 
-                Force.deleteMany({ jediname : dbJediData.jediname })
-                .then(() => {
-                    res.json({message: "Successfully deleted"});
-                })
-                .catch(err => res.status(400).json(err));
-            })
-            .catch(err => res.status(400).json(err));
-        })
-        .catch(err => res.status(400).json(err));
+                        Force.deleteMany({ jediname: dbJediData.jediname })
+                            .then(() => {
+                                res.json({ message: "Master Jedi is one with the force now...#force ghost" });
+                            })
+                            .catch(err => res.status(400).json(err));
+                    })
+            });
     },
 
-    addPadawan({ params }, res) {
-       Jedi.findOneAndUpdate(
+    addPadawan({ params, body }, res) {
+        Jedi.findOneAndUpdate(
             { _id: params.jediId },
-            { $addToSet: { padawan: params.padawanId } },
+            { $addToSet: { padawans: body } },
             { new: true, runValidators: true }
         )
-        .then(dbJediData => {
-            if (!dbJediData) {
-                res.status(404).json({ message: "No jedi found" });
-                return;
-            }
-
-            Jedi.findOneAndUpdate(
-                { _id: params.padawanId },
-                { $addToSet: { padawan: params.jediId } },
-                { new: true, runValidators: true }
-            )
             .then(dbJediData => {
-                if(!dbJediData) {
-                    res.status(404).json({ message: "No jedi found" })
+                if (!dbJediData) {
+                    res.status(404).json({ message: "No Jedi found" });
                     return;
                 }
                 res.json(dbJediData);
             })
-            .catch(err => res.json(err));
-        })
-        .catch(err => res.json(err));
+            .catch(err => res.status(500).json(err));
     },
 
-    deletePadawan({ params }, res) {
+    deletePadawan({ params, body }, res) {
         Jedi.findOneAndUpdate(
             { _id: params.jediId },
-            { $pull: { padawan: params.padawanId } },
+            { $pull: { padawan: { skillId: body.padawanId } } },
             { new: true, runValidators: true }
         )
-        .then(dbJediData => {
-            if (!dbJediData) {
-                res.status(404).json({ message: "No jedi found" });
-                return;
-            }
-            Jedi.findOneAndUpdate(
-                { _id: params.padawanId },
-                { $pull: { padawan: params.jediId } },
-                { new: true, runValidators: true }
-            )
             .then(dbJediData => {
-                if(!dbJediData) {
-                    res.status(404).json({ message: "No jedi found" })
+                if (!dbJediData) {
+                    res.status(404).json({ message: "No Jedifound" });
                     return;
                 }
-                res.json({message: "Successfully deleted"});
+                res.json({ message: " Young Padawan is one with the force now...#force ghost" });
             })
-            .catch(err => res.json(err));
-        })
-        .catch(err => res.json(err));
-    }
+            .catch(err => res.status(500).json(err));
+    },
 }
-
 module.exports = jediController;

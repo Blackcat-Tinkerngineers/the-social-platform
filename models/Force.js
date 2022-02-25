@@ -14,7 +14,7 @@ var forceSchema = new Schema({
         default: Date.now,
         get: (createdAtVal) => moment(createdAtVal).format("MM DD, YYYY [at] hh:mm a")
     },
-    jediname: {
+    skillsname: {
         type: String,
         required: true
     },

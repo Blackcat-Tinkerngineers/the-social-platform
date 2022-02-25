@@ -13,14 +13,14 @@ var jediSchema = new Schema({
         unique: true,
         match: [/.+@.+\..+/]
     },
-    force: [{ type: Schema.Types.ObjectId, ref: "Force" }],
     padawan: [{ type: Schema.Types.ObjectId, ref: "Jedi" }]
 },
     {
         toJSON: {
-            virtuals: true
+            virtuals: true,
+            getters: true
         },
-        id: false
+    id: false
     });
 
 jediSchema.virtual("padawanCount").get(function () {

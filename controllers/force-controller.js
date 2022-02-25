@@ -31,21 +31,7 @@ var forceController = {
 
     createForce({ body }, res) {
         Force.create(body)
-            .then(dbForceData => {
-                Jedi.findOneAndUpdate(
-                    { _id: body.JediId },
-                    { $push: { forces: dbForceData._id } },
-                    { new: true }
-                )
-                    .then(dbJediData => {
-                        if (!dbJediData) {
-                            res.status(404).json({ message: "No id found" });
-                            return;
-                        }
-                        res.json(dbJediData);
-                    })
-                    .catch(err => res.json(err));
-            })
+            .then(dbForceData => res.json(dbForceData))
             .catch(err => res.status(400).json(err));
     },
 
@@ -73,16 +59,15 @@ var forceController = {
                     return;
                 }
 
-                Jedi.findOneAndUpdate(
-                    { jediname: dbForceData.Jediname },
+                Force.findOneAndUpdate(
+                    { Forcename: dbForceData.Forcename },
                     { $pull: { forces: params.id } }
                 )
                     .then(() => {
                         res.json({ message: "Successfully deleted" });
                     })
                     .catch(err => res.status(500).json(err));
-            })
-            .catch(err => res.status(500).json(err));
+            });
     },
 
     addSkill({ params, body }, res) {
@@ -93,7 +78,7 @@ var forceController = {
         )
             .then(dbForceData => {
                 if (!dbForceData) {
-                    res.status(404).json({ message: "No id found" });
+                    res.status(404).json({ message: "No force found" });
                     return;
                 }
                 res.json(dbForceData);
@@ -101,21 +86,21 @@ var forceController = {
             .catch(err => res.status(500).json(err));
     },
 
-    deleteSkill({ params, body }, res) {
-        Force.findOneAndUpdate(
-            { _id: params.forceId },
-            { $pull: { skills: { skillId: body.skillId } } },
-            { new: true, runValidators: true }
-        )
-            .then(dbForceData => {
-                if (!dbForceData) {
-                    res.status(404).json({ message: "No id found" });
-                    return;
-                }
-                res.json({ message: "Successfully deleted" });
-            })
-            .catch(err => res.status(500).json(err));
-    },
-}
+    F.findOneAndUpdate(
+        { _id: { $in: dbJediData.padawan } },
+        { $pull: { padawans: params.id } }
+    )
+        .then(() => {
 
+            Force.deleteMany({ jediname: dbJediData.jediname })
+                .then(() => {
+                    res.json({ message: "Master Jedi is one with the force now...#force ghost" });
+                })
+                .catch(err => res.status(400).json(err));
+        })
+});
+},
+ 
+ 
+ 
 module.exports = forceController;

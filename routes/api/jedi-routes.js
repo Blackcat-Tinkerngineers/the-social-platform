@@ -19,7 +19,7 @@ router.route("/:id")
     .put(updateJedi)
     .delete(deleteJedi)
 
-router.route("/:jediId/padawan/:padawanId")
+router.route("/:jediId/padawans")
     .post(addPadawan)
     .delete(deletePadawan)
 
