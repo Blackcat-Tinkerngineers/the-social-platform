@@ -1,8 +1,8 @@
 var router = require("express").Router();
-var userRoutes = require("./user-routes");
-var thoughtRoutes = require("./thought-routes");
+var JediRoutes = require("./Jedi-routes");
+var forceRoutes = require("./force-routes");
 
-router.use("/users", userRoutes);
-router.use("/thoughts", thoughtRoutes);
+router.use("/Jedis", JediRoutes);
+router.use("/forces", forceRoutes);
 
 module.exports = router;

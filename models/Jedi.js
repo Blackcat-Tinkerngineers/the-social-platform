@@ -1,7 +1,7 @@
 var { Schema, model } = require("mongoose");
 
-var userSchema = new Schema({
-    username: {
+var jediSchema = new Schema({
+    jediname: {
         type: String,
         required: true,
         trim: true,
@@ -13,8 +13,8 @@ var userSchema = new Schema({
         unique: true,
         match: [/.+@.+\..+/]
     },
-    thoughts: [{ type: Schema.Types.ObjectId, ref: "Thought" }],
-    friends: [{ type: Schema.Types.ObjectId, ref: "User" }]
+    force: [{ type: Schema.Types.ObjectId, ref: "Force" }],
+    padawan: [{ type: Schema.Types.ObjectId, ref: "Jedi" }]
 },
     {
         toJSON: {
@@ -23,10 +23,10 @@ var userSchema = new Schema({
         id: false
     });
 
-userSchema.virtual("friendCount").get(function () {
-    return this.friends.length;
+jediSchema.virtual("padawanCount").get(function () {
+    return this.padawan.length;
 });
 
-var User = model("User", userSchema);
+var Jedi = model("Jedi", jediSchema);
 
-module.exports = User;
+module.exports = Jedi;

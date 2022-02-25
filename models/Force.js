@@ -1,9 +1,9 @@
 var { Schema, model } = require("mongoose");
-var reactionSchema = require("./Reaction");
+var skillSchema = require("./skill");
 var moment = require("moment");
 
-var thoughtSchema = new Schema({
-    thoughtText: {
+var forceSchema = new Schema({
+    forceText: {
         type: String,
         required: true,
         minLength: 1,
@@ -14,11 +14,11 @@ var thoughtSchema = new Schema({
         default: Date.now,
         get: (createdAtVal) => moment(createdAtVal).format("MM DD, YYYY [at] hh:mm a")
     },
-    username: {
+    jediname: {
         type: String,
         required: true
     },
-    reactions: [reactionSchema]
+    skills: [skillSchema]
 },
     {
         toJSON: {
@@ -28,10 +28,10 @@ var thoughtSchema = new Schema({
         id: false
     });
 
-thoughtSchema.virtual("reactionCount").get(function () {
-    return this.reactions.length;
+forceSchema.virtual("skillCount").get(function () {
+    return this.skills.length;
 });
 
-var Thought = model("Thought", thoughtSchema);
+var force = model("Force", forceSchema);
 
-module.exports = Thought;
+module.exports = force;

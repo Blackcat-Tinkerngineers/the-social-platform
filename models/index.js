@@ -1,4 +1,4 @@
-var User = require("./User");
-var Thought = require("./Thought");
+var Jedi = require("./Jedi");
+var Force = require("./Force");
 
-module.exports = { User, Thought };
+module.exports = { Jedi, Force };

@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(require("./routes"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost:27017/the-social-platform", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb+srv://chelsieuser:chelsiepassword@cluster0.vw7fo.mongodb.net/the-social-platform?retryWrites=true&w=majority", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });

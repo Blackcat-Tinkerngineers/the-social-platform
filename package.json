@@ -6,7 +6,7 @@
     "express-mongo-db": "^1.0.0",
     "mongo-express": "^1.0.0-alpha.4",
     "mongodb": "^4.4.0",
-    "mongoose": "^6.2.2"
+    "mongoose": "^6.2.3"
   },
   "scripts": {
     "start": "nodemon server.js"

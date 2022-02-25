@@ -1,17 +1,17 @@
 var { Schema, model, Types } = require("mongoose");
 var moment = require("moment");
 
-var reactionSchema = new Schema({
-    reactionId: {
+var skillSchema = new Schema({
+    skillId: {
         type: Types.ObjectId,
         default: new Types.ObjectId()
     },
-    reactionBody: {
+    skillBody: {
         type: String,
         required: true,
         maxLength: 280
     },
-    username: {
+    jediname: {
         type: String,
         required: true
     },
@@ -28,4 +28,4 @@ var reactionSchema = new Schema({
         id: false
     });
 
-module.exports = reactionSchema;
+module.exports = skillSchema;

@@ -1,27 +1,27 @@
-var { User, Thought, Reaction } = require("../models");
+var { Jedi, Force, Skill } = require("../models");
 
-var thoughtController = {
-    getAllThoughts(req, res) {
-        Thought.find({})
-            .populate({ path: "reactions", select: "-__v" })
+var forceController = {
+    getAllForces(req, res) {
+        Force.find({})
+            .populate({ path: "skills", select: "-__v" })
             .select("-__v")
-            .then(dbThoughtData => res.json(dbThoughtData))
+            .then(dbForceData => res.json(dbForceData))
             .catch(err => {
                 console.log(err);
                 res.status(500).json(err);
             })
     },
 
-    getThoughtById({ params }, res) {
-        Thought.findOne({ _id: params.id })
-            .populate({ path: "reactions", select: "-__v" })
+    getForceById({ params }, res) {
+        Force.findOne({ _id: params.id })
+            .populate({ path: "skills", select: "-__v" })
             .select("-__v")
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
+            .then(dbForceData => {
+                if (!dbForceData) {
                     res.status(404).json({ message: "No id found" });
                     return;
                 }
-                res.json(dbThoughtData);
+                res.json(dbForceData);
             })
             .catch(err => {
                 console.log(err);
@@ -29,53 +29,53 @@ var thoughtController = {
             });
     },
 
-    createThought({ body }, res) {
-        Thought.create(body)
-            .then(dbThoughtData => {
-                User.findOneAndUpdate(
-                    { _id: body.userId },
-                    { $push: { thoughts: dbThoughtData._id } },
+    createForce({ body }, res) {
+        Force.create(body)
+            .then(dbForceData => {
+                Jedi.findOneAndUpdate(
+                    { _id: body.JediId },
+                    { $push: { forces: dbForceData._id } },
                     { new: true }
                 )
-                    .then(dbUserData => {
-                        if (!dbUserData) {
+                    .then(dbJediData => {
+                        if (!dbJediData) {
                             res.status(404).json({ message: "No id found" });
                             return;
                         }
-                        res.json(dbUserData);
+                        res.json(dbJediData);
                     })
                     .catch(err => res.json(err));
             })
             .catch(err => res.status(400).json(err));
     },
 
-    updateThought({ params, body }, res) {
-        Thought.findOneAndUpdate(
+    updateForce({ params, body }, res) {
+        Force.findOneAndUpdate(
             { _id: params.id },
             body,
             { new: true }
         )
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
+            .then(dbForceData => {
+                if (!dbForceData) {
                     res.status(404).json({ message: "No id found" });
                     return;
                 }
-                res.json(dbThoughtData);
+                res.json(dbForceData);
             })
             .catch(err => res.status(400).json(err));
     },
 
-    deleteThought({ params }, res) {
-        Thought.findOneAndDelete({ _id: params.id })
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
+    deleteForce({ params }, res) {
+        Force.findOneAndDelete({ _id: params.id })
+            .then(dbForceData => {
+                if (!dbForceData) {
                     res.status(404).json({ message: "No id found" });
                     return;
                 }
 
-                User.findOneAndUpdate(
-                    { username: dbThoughtData.username },
-                    { $pull: { thoughts: params.id } }
+                Jedi.findOneAndUpdate(
+                    { jediname: dbForceData.Jediname },
+                    { $pull: { forces: params.id } }
                 )
                     .then(() => {
                         res.json({ message: "Successfully deleted" });
@@ -85,30 +85,30 @@ var thoughtController = {
             .catch(err => res.status(500).json(err));
     },
 
-    addReaction({ params, body }, res) {
-        Thought.findOneAndUpdate(
-            { _id: params.thoughtId },
-            { $addToSet: { reactions: body } },
+    addSkill({ params, body }, res) {
+        Force.findOneAndUpdate(
+            { _id: params.forceId },
+            { $addToSet: { skills: body } },
             { new: true, runValidators: true }
         )
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
+            .then(dbForceData => {
+                if (!dbForceData) {
                     res.status(404).json({ message: "No id found" });
                     return;
                 }
-                res.json(dbThoughtData);
+                res.json(dbForceData);
             })
             .catch(err => res.status(500).json(err));
     },
 
-    deleteReaction({ params, body }, res) {
-        Thought.findOneAndUpdate(
-            { _id: params.thoughtId },
-            { $pull: { reactions: { reactionId: body.reactionId } } },
+    deleteSkill({ params, body }, res) {
+        Force.findOneAndUpdate(
+            { _id: params.forceId },
+            { $pull: { skills: { skillId: body.skillId } } },
             { new: true, runValidators: true }
         )
-            .then(dbThoughtData => {
-                if (!dbThoughtData) {
+            .then(dbForceData => {
+                if (!dbForceData) {
                     res.status(404).json({ message: "No id found" });
                     return;
                 }
@@ -118,4 +118,4 @@ var thoughtController = {
     },
 }
 
-module.exports = thoughtController;
+module.exports = forceController;
