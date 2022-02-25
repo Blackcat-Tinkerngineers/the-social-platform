@@ -1,10 +1,10 @@
-const { User, Thought } = require('../models');
+var { User, Thought } = require("../models");
 
-const userController = {
+var userController = {
 
     getAllUsers(req, res) {
         User.find({})
-        .select('-__v')
+        .select("-__v")
         .then(dbUserData => res.json(dbUserData))
         .catch(err => {
             console.log(err);
@@ -15,13 +15,13 @@ const userController = {
     getUserById({ params }, res) {
         User.findOne({ _id: params.id })
         .populate([
-            { path: 'thoughts', select: "-__v" },
-            { path: 'friends', select: "-__v" }
+            { path: "thoughts", select: "-__v" },
+            { path: "friends", select: "-__v" }
         ])
-        .select('-__v')
+        .select("-__v")
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({message: 'No user found'});
+                res.status(404).json({message: "No user found"});
                 return;
             }
             res.json(dbUserData);
@@ -32,29 +32,17 @@ const userController = {
         });
     },
 
-    // POST /api/users
-    // expected body:
-    // {
-    //     "username": "foo",
-    //     "email": "bar@baz.com"  // must follow the email format
-    // }
     createUser({ body }, res) {
         User.create(body)
         .then(dbUserData => res.json(dbUserData))
         .catch(err => res.status(400).json(err));
     },
 
-    // PUT /api/users/:id
-    // expected body includes at least one of the attributes below:
-    // {
-    //     "username": "foo",
-    //     "email": "bar@baz.com"  // must follow the email format
-    // }
     updateUser({ params, body }, res) {
         User.findOneAndUpdate({ _id: params.id }, body, { new: true, runValidators: true })
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found' });
+                res.status(404).json({ message: "No user found" });
                 return;
             }
             res.json(dbUserData);
@@ -64,11 +52,10 @@ const userController = {
 
 
     deleteUser({ params }, res) {
-        // delete the user
         User.findOneAndDelete({ _id: params.id })
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found'});
+                res.status(404).json({ message: "No user found"});
                 return;
             }
 
@@ -90,7 +77,6 @@ const userController = {
     },
 
     addFriend({ params }, res) {
-        // add friendId to userId's friend list
         User.findOneAndUpdate(
             { _id: params.userId },
             { $addToSet: { friends: params.friendId } },
@@ -98,7 +84,7 @@ const userController = {
         )
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found' });
+                res.status(404).json({ message: "No user found" });
                 return;
             }
 
@@ -109,7 +95,7 @@ const userController = {
             )
             .then(dbUserData2 => {
                 if(!dbUserData2) {
-                    res.status(404).json({ message: 'No user found' })
+                    res.status(404).json({ message: "No user found" })
                     return;
                 }
                 res.json(dbUserData);
@@ -127,7 +113,7 @@ const userController = {
         )
         .then(dbUserData => {
             if (!dbUserData) {
-                res.status(404).json({ message: 'No user found' });
+                res.status(404).json({ message: "No user found" });
                 return;
             }
             User.findOneAndUpdate(
@@ -137,10 +123,10 @@ const userController = {
             )
             .then(dbUserData2 => {
                 if(!dbUserData2) {
-                    res.status(404).json({ message: 'No user found' })
+                    res.status(404).json({ message: "No user found" })
                     return;
                 }
-                res.json({message: 'Successfully deleted'});
+                res.json({message: "Successfully deleted"});
             })
             .catch(err => res.json(err));
         })
