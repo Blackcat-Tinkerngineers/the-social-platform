@@ -88,20 +88,19 @@ var forceController = {
 
     deleteSkill({ params }, res) {
     Force.findOneAndUpdate(
-        { _id: { $in: dbJediData.padawan } },
-        { $pull: { padawans: params.id } }
+        { _id: params.forceId },
+        { $pull: { skills: { _id: params.skillId } } },
+        { new: true, runValidators: true }
     )
-        .then(() => {
-
-            Force.deleteMany({ jediname: dbJediData.jediname })
-                .then(() => {
-                    res.json({ message: "Master Jedi is one with the force now...#force ghost" });
-                })
-                .catch(err => res.status(400).json(err));
+        .then(dbForceData => {
+            if (!dbForceData) {
+                res.status(404).json({ message: "No force found" });
+                return;
+            }
+            res.json(dbForceData);
         })
-        .catch(err => res.status(400).json(err));
-    }
+        .catch(err => res.status(500).json(err));
+}
 };
- 
  
 module.exports = forceController;
