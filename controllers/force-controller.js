@@ -86,7 +86,8 @@ var forceController = {
             .catch(err => res.status(500).json(err));
     },
 
-    F.findOneAndUpdate(
+    deleteSkill({ params }, res) {
+    Force.findOneAndUpdate(
         { _id: { $in: dbJediData.padawan } },
         { $pull: { padawans: params.id } }
     )
@@ -98,9 +99,9 @@ var forceController = {
                 })
                 .catch(err => res.status(400).json(err));
         })
-});
-},
- 
+        .catch(err => res.status(400).json(err));
+    }
+};
  
  
 module.exports = forceController;
