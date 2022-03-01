@@ -14,7 +14,7 @@
 
   ## About the Project
   <p></p>
-<a href="https://the-social-platformerrr.herokuapp.com">https://the-social-platformerrr.herokuapp.com/</a>
+<!--<a href="https://the-social-platformerrr.herokuapp.com">https://the-social-platformerrr.herokuapp.com/</a>-->
 
 <!-- input deployment url here-->
 
@@ -27,9 +27,6 @@
 ## Built With
 
 <a href="https://www.mongodb.com/">https://www.mongodb.com/</a>
-<br>
-</br>
-<a href="https://www.heroku.com/">https://www.heroku.com/</a>
 <br>
 </br>
 <a href="https://code.visualstudio.com/">https://code.visualstudio.com/</a>
